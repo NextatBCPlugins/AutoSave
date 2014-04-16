@@ -1,0 +1,3 @@
+"id","name","status","plugin","controller","action","created","modified"
+"","ブログ","1","blog","blog_posts","admin_add","",""
+"","固定ページ","1","","pages","admin_add","",""
