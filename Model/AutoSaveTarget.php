@@ -7,7 +7,7 @@
  * @link       http://nextat.co.jp
  * @package    nextat.bcplugins.auto_save
  * @since      baserCMS v 3.0.0
- * @version    0.9.0
+ * @version    0.9.1
  * @license    MIT License
  */
 App::uses('BcPluginAppModel', 'Model');
