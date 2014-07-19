@@ -49,7 +49,7 @@ var Nextat;
             FormData.prototype.init = function () {
                 this.initLogArea();
                 if(this.isRestorable()) {
-                    if(confirm('自動保存データをがあります。復元しますか？')) {
+                    if(confirm('自動保存データがあります。復元しますか？')) {
                         this.restore();
                     }
                 }
