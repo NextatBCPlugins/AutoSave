@@ -4,21 +4,17 @@
  * [AutoSave]自動保存ターゲットモデル
  *
  * @copyright Copyright 2014 - , Nextat Inc.
- * @link       http://nextat.co.jp
+ * @link       https://nextat.co.jp
  * @package    nextat.bcplugins.auto_save
  * @since      baserCMS v 3.0.0
- * @version    0.9.1
+ * @version    1.0.0
  * @license    MIT License
  */
-App::uses('BcPluginAppModel', 'Model');
-
-class AutoSaveTarget extends AutoSaveAppModel {
-
+class AutoSaveTarget extends AppModel
+{
     /**
      * クラス名
-     *
      * @var string
-     * @access public
      */
     public $name = 'AutoSaveTarget';
 
@@ -27,23 +23,24 @@ class AutoSaveTarget extends AutoSaveAppModel {
      * @param CakeRequest $request
      * @return array
      */
-    public function getRequested(CakeRequest $request) {
+    public function getRequested(CakeRequest $request)
+    {
+        $conditions = [
+            'controller' => $request->controller,
+            'action' => $request->action,
+            'status' => 1
+        ];
 
-	$conditions = array(
-	    'controller' => $request->controller,
-	    'action' => $request->action,
-	    'status' => 1
-	);
+        if (!empty($request->plugin)) {
+            $conditions['plugin'] = $request->plugin;
+        }
 
-	if (!empty($request->plugin)) {
-	    $conditions['plugin'] = $request->plugin;
-	}
 
-	$results = $this->find('all', array(
-	    'conditions' => $conditions,
-	));
+        $results = $this->find('all', [
+            'conditions' => $conditions,
+        ]);
 
-	return $results;
+        return $results;
     }
 
     /**
@@ -51,13 +48,9 @@ class AutoSaveTarget extends AutoSaveAppModel {
      * @param CakeRequest $request
      * @return boolean
      */
-    public function isEnabledOn(CakeRequest $request) {
-	$results = $this->getRequested($request);
-
-	if (empty($results)) {
-	    return false;
-	}
-	return true;
+    public function isEnabledOn(CakeRequest $request)
+    {
+        $results = $this->getRequested($request);
+        return !empty($results);
     }
-
 }

@@ -4,58 +4,62 @@
  * [AutoSave]AutoSaveビューイベントリスナー
  *
  * @copyright Copyright 2014 - , Nextat Inc.
- * @link       http://nextat.co.jp
+ * @link       https://nextat.co.jp
  * @package    nextat.bcplugins.auto_save
  * @since      baserCMS v 3.0.0
- * @version    0.9.1
+ * @version    1.0.0
  * @license    MIT License
  */
-class AutoSaveViewEventListener extends BcViewEventListener {
-
+class AutoSaveViewEventListener extends BcViewEventListener
+{
     /**
      * 登録イベント
-     *
-     * @var array
+     * @var string[]
      */
-    public $events = array(
-	'beforeLayout'
-    );
+    public $events = [
+        'beforeLayout'
+    ];
 
     /**
      * beforeLayout
-     * 
      * @param CakeEvent $event
-     * @return void 
+     * @return void
      */
-    public function beforeLayout(CakeEvent $event) {
-	$View = $event->subject();
-	$request = $View->request;
+    public function beforeLayout(CakeEvent $event)
+    {
+        /** @var BcAppView $View */
+        $View = $event->subject();
 
-	//管理画面でなければ何もしない
-	if (!preg_match('/^admin_/', $request->action)) {
-	    return;
-	}
-	//現在のページが自動保存オンに設定されているかチェック
-	$AutoSaveTarget = ClassRegistry::init('AutoSave.AutoSaveTarget');
-	if (!$AutoSaveTarget->isEnabledOn($request)) {
-	    return;
-	}
+        /** @var CakeRequest $request */
+        $request = $View->request;
 
+        //管理画面でなければ何もしない
+        if (!$request->isAdmin()) {
+            return;
+        }
 
-	//プラグインの設定を連想配列で取得
-	$AutoSaveConfig = ClassRegistry::init('AutoSave.AutoSaveConfig');
-	$configs = $AutoSaveConfig->getAllByHash();
+        //現在のページが自動保存オンに設定されているかチェック
+        /** @var AutoSaveTarget $AutoSaveTarget */
+        $AutoSaveTarget = ClassRegistry::init('AutoSave.AutoSaveTarget');
+        $autoSaveTarget = $AutoSaveTarget->getRequested($request);
+        if (empty($autoSaveTarget)) {
+            return;
+        }
 
+        //プラグインの設定を連想配列で取得
+        /** @var AutoSaveConfig $AutoSaveConfig */
+        $AutoSaveConfig = ClassRegistry::init('AutoSave.AutoSaveConfig');
+        $configs = $AutoSaveConfig->getAllByHash();
 
-	// $View->BcBaser->scripts()で出力される領域（$scripts_for_layout）に
-	// View/Elements/admin/script.phpの内容を追加
-	$script = $View->element('AutoSave.script', array(
-	    'formId' => Inflector::classify($request->controller) . 'Form',
-	    'configs' => $configs
-	));
-	$View->addScript($script);
+        // $View->BcBaser->scripts()で出力される領域（$scripts_for_layout）に
+        // View/Elements/admin/script.phpの内容を追加
+        $script = $View->element('AutoSave.script', array(
+            'formId' => $autoSaveTarget[0]['AutoSaveTarget']['form_id'],
+            'configs' => $configs
+        ));
 
-	return;
+        $View->append('script', $script);
+
+        return;
     }
-
 }

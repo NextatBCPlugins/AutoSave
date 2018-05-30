@@ -22,8 +22,12 @@ MITライセンス  <http://opensource.org/licenses/mit-license.php>
 - 固定ページ・ブログ個別に保存のオンオフ可
 - サーバ側のDBではなくブラウザに保存  
    　　[store.js](https://github.com/marcuswestin/store.js)を利用（localStorage + IEで非対応の場合userData Behaviorでフォールバック）  
-- ラジオボタン（公開・非公開んど）、チェックボックス（ブログ投稿のタグなど）、画像ファイル（アイキャッチ画像など）の保存には非対応
+- ラジオボタン（公開・非公開など）、チェックボックス（ブログ投稿のタグなど）、画像ファイル（アイキャッチ画像など）の保存には非対応
 - 動作確認：Internet Explorer 8以上, Mozzila FireFox, Google Chrome
+
+### v1.0.0
+- baserCMS4に対応
+- ブログ新規追加・ブログ編集・固定ページ編集の3項目をオンオフできるように変更
 
 ### 対応予定
 - ラジオボタンの値の保存

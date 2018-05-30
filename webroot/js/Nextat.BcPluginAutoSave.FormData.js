@@ -24,6 +24,9 @@ var Nextat;
                 this.id = config.id;
                 this.interval = config.interval * 1000 || 30000;
                 this.form = document.getElementById(this.id);
+                if (this.form === null) {
+                    throw new Error('id="' + this.id + '"の要素が見つかりませんでした');
+                }
                 this.logId = 'AutoSaveLog';
                 this.logPrefix = '【自動保存プラグイン】';
                 this.prefix = config.prefix;
